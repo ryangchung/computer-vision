@@ -14,13 +14,16 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from database.db import add_website as db_add_website, get_productive_value
 
 
-model = tf.keras.models.load_model("model.h5")  # Replace with the path to your saved model
+model = tf.keras.models.load_model(
+    "model.h5"
+)  # Replace with the path to your saved model
 
 
 class Website(BaseModel):
     url: str
 
-#Takes uploaded image and returns if productuve or not
+
+# Takes uploaded image and returns if productuve or not
 def predict_productivity(image_path: str) -> bool:
 
     # Load and preprocess the image
@@ -34,10 +37,10 @@ def predict_productivity(image_path: str) -> bool:
     return bool(prediction[0][0] > 0.5)
 
 
-
 def decide_productivity(url: str) -> bool:
     # TODO: Call ML model to predict productivity
     return True
+
 
 def create_app():
     app = FastAPI()
@@ -49,7 +52,6 @@ def create_app():
         allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
         allow_headers=["*"],  # Allows all headers
     )
-    
 
     @app.get("/")
     def read_root():
@@ -62,8 +64,6 @@ def create_app():
             productive = decide_productivity(website.url)
             db_add_website(website.url, productive)
         return {"url": website.url, "productive": productive}
-
-
 
     @app.post("/predict")
     async def predict_image(file: UploadFile = File(...)):
@@ -79,11 +79,8 @@ def create_app():
         os.remove(file_location)
 
         return {"productive": result}
+
     return app
 
 
-    
-
 app = create_app()
-
-

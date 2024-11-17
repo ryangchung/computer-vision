@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
@@ -16,12 +15,15 @@
     <p>Select an image to check if it is productive or unproductive.</p>
     <input type="file" id="upload-input" />
     <button type="button" id="upload-btn">Upload and Check</button>
+
     <p id="result"></p>
 
     <script type="module">
       // When upload
       document.getElementById("upload-btn").addEventListener("click", async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form submission or default behavior
+
+        console.log("Button clicked. Preventing form submission...");
 
         const input = document.getElementById("upload-input");
         const resultElement = document.getElementById("result");
@@ -49,23 +51,11 @@
           }
 
           const result = data.productive ? "Productive" : "Unproductive";
-
-          if (result === "Productive") {
-            document.getElementById('verify').textContent = "Website Allowed!";
-          }
-
+          console.log(result); // Log the result
           resultElement.textContent = `Result: ${result}`;
-
-          // Set timeout to clear result after 5 seconds
-          setTimeout(() => {
-            resultElement.textContent = "";
-          }, 5000); // Clear result after 5 seconds
         } catch (error) {
           console.error("Error:", error);
           resultElement.textContent = `An error occurred: ${error.message}`;
-
-
-        
         }
       });
     </script>

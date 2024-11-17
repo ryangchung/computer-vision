@@ -5,33 +5,24 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 import shutil
-import tensorflow as tf
+
+
+
 
 import numpy as np
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from database.db import add_website as db_add_website, get_productive_value
+from tensor_model.src.model import predict_productivity
 
 
-model = tf.keras.models.load_model("model.h5")  # Replace with the path to your saved model
 
 
 class Website(BaseModel):
     url: str
 
-#Takes uploaded image and returns if productuve or not
-def predict_productivity(image_path: str) -> bool:
-
-    # Load and preprocess the image
-    img = tf.keras.utils.load_img(image_path, target_size=(128, 128))
-    # load_img(image_path, target_size=(128, 128))
-    img_array = tf.keras.utils.img_to_array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-
-    # Predict using the model
-    prediction = model.predict(img_array)
-    return bool(prediction[0][0] > 0.5)
 
 
 
@@ -65,20 +56,24 @@ def create_app():
 
 
 
+    #To predict if productive
     @app.post("/predict")
     async def predict_image(file: UploadFile = File(...)):
         # Save the uploaded file
         file_location = f"temp_{file.filename}"
+        print(f"Received file: {file.filename}")  # Debugging log
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
         # Predict productivity
         result = predict_productivity(file_location)
+        print(f"Prediction result: {result}")  # Debugging log
 
         # Clean up the temporary file
-        os.remove(file_location)
+        os.remove(file_location)  # Uncomment to clean up temp file
 
         return {"productive": result}
+
     return app
 
 

@@ -8,11 +8,66 @@
   </head>
   <body>
     <div class="container">
-      <h1>Website Blocked!</h1>
+      <h1 id="verify">Website Blocked!</h1>
       <p>This site has been blocked to help you stay focused.</p>
       <button class="unblock-btn">Unblock</button>
     </div>
 
-    <script type="module" src="/main.js"></script>
+    <p>Select an image to check if it is productive or unproductive.</p>
+    <input type="file" id="upload-input" />
+    <button type="button" id="upload-btn">Upload and Check</button>
+    <p id="result"></p>
+
+    <script type="module">
+      // When upload
+      document.getElementById("upload-btn").addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const input = document.getElementById("upload-input");
+        const resultElement = document.getElementById("result");
+
+        // Check if an image is selected
+        if (input.files.length === 0) {
+          console.log("No file selected.");
+          resultElement.textContent = "Please select an image file.";
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", input.files[0]);
+
+        try {
+          const response = await fetch("http://127.0.0.1:8000/predict", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          const result = data.productive ? "Productive" : "Unproductive";
+
+          if (result === "Productive") {
+            document.getElementById('verify').textContent = "Website Allowed!";
+          }
+
+          resultElement.textContent = `Result: ${result}`;
+
+          // Set timeout to clear result after 5 seconds
+          setTimeout(() => {
+            resultElement.textContent = "";
+          }, 5000); // Clear result after 5 seconds
+        } catch (error) {
+          console.error("Error:", error);
+          resultElement.textContent = `An error occurred: ${error.message}`;
+
+
+        
+        }
+      });
+    </script>
   </body>
 </html>

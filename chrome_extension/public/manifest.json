@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "name": "Unproductivity Blocker",
+    "version": "1.0.0",
+    "description": "Blocks all unproductive websites using computer vision and machine learning.",
+    "action": {
+      "default_popup": "index.html"
+    },
+    "permissions": []
+  }

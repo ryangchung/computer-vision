@@ -6,7 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database.db import add_website as db_add_website, get_productive_value, initialize_database
+from database.db import (
+    add_website as db_add_website,
+    get_productive_value,
+    initialize_database,
+)
 
 # Import model.py
 sys.path.append(
@@ -23,13 +27,8 @@ class Website(BaseModel):
 
 def decide_productivity(url: str) -> bool:
     # Path relative to api.py
-    screenshot_path = (
-        "../tensor_model/dataset/real_time/"
-        + url.replace("/", "$").replace(":", "#")
-        + ".png"
-    )
-    take_screenshot(url)
-    return predict_productivity(screenshot_path)
+    path = take_screenshot(url)
+    return predict_productivity(path)
 
 
 def create_app():
@@ -55,6 +54,7 @@ def create_app():
         if productive is None:
             productive = decide_productivity(website.url)
             db_add_website(website.url, productive)
+        print({"url": website.url, "productive": productive})
         return {"url": website.url, "productive": productive}
 
     return app

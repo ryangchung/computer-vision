@@ -6,5 +6,24 @@
     "action": {
       "default_popup": "index.html"
     },
-    "permissions": []
-  }
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "<all_urls>",
+        "declarativeNetRequest",
+        "declarativeNetRequestWithHostAccess",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "ruleset_1",
+                "enabled": true,
+                "path": "rules.json"
+            }
+        ]
+    }
+}

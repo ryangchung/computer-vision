@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from database.db import add_website as db_add_website, get_productive_value
+from database.db import add_website as db_add_website, get_productive_value, initialize_database
 
 # Import model.py
 sys.path.append(
@@ -22,6 +22,7 @@ class Website(BaseModel):
 
 
 def decide_productivity(url: str) -> bool:
+    # Path relative to api.py
     screenshot_path = (
         "../tensor_model/dataset/real_time/"
         + url.replace("/", "$").replace(":", "#")
@@ -33,6 +34,8 @@ def decide_productivity(url: str) -> bool:
 
 def create_app():
     app = FastAPI()
+
+    initialize_database()
 
     app.add_middleware(
         CORSMiddleware,

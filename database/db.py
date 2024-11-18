@@ -34,9 +34,4 @@ def add_website(url, productive):
         cursor.execute(
             "INSERT INTO websites (url, productive) VALUES (?, ?)", (url, productive)
         )
-        # Commit the changes
         conn.commit()
-
-
-# Call the function to initialize the database
-initialize_database()

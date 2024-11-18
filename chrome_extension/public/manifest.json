@@ -10,6 +10,10 @@
     "background": {
       "service_worker": "background.js"
     },
+    "converted_from_user_script": true,
+    "action": {
+      "default_popup": "index.html"
+    },
     "host_permissions": [
       "http://127.0.0.1:8000/check-productivity"
     ]

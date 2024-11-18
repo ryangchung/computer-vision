@@ -1,6 +1,12 @@
 # computer-vision
 CUHacking Computer Vision Project
 
+### Installation
+```
+pip install "fastapi[standard]"
+pip install tensorflow
+```
+
 ### Folder Structure
 `/api`: FastAPI web server (interfacing with the frontend)  
 `/client`: React-TypeScript frontend on Vite  

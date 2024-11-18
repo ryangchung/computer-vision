@@ -1,29 +1,16 @@
 {
     "manifest_version": 3,
     "name": "Unproductivity Blocker",
-    "version": "1.0.0",
     "description": "Blocks all unproductive websites using computer vision and machine learning.",
-    "action": {
-      "default_popup": "index.html"
-    },
+    "version": "1.0",
     "permissions": [
-        "webRequest",
-        "webRequestBlocking",
-        "<all_urls>",
-        "declarativeNetRequest",
-        "declarativeNetRequestWithHostAccess",
-        "activeTab"
+      "webNavigation",
+      "activeTab"
     ],
     "background": {
-        "service_worker": "background.js"
+      "service_worker": "background.js"
     },
-    "declarative_net_request": {
-        "rule_resources": [
-            {
-                "id": "ruleset_1",
-                "enabled": true,
-                "path": "rules.json"
-            }
-        ]
-    }
-}
+    "host_permissions": [
+      "http://127.0.0.1:8000/check-productivity"
+    ]
+  }

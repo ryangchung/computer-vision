@@ -3,6 +3,10 @@ const REDIRECT_URL = chrome.runtime.getURL("blocked.html");
 
 chrome.webNavigation.onCompleted.addListener(async (details) => {
   try {
+    if (details.frameId !== 0) {
+      return;
+    }
+
     const { url } = details;
 
     const response = await fetch(API_URL, {
@@ -20,6 +24,7 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
         chrome.tabs.update(details.tabId, { url: result.url });
       }
     }
+    chrome.tabs.update(details.tabId, { url: REDIRECT_URL });
   } catch (error) {
     console.error("Error checking productivity:", error);
   }

@@ -20,11 +20,10 @@ chrome.webNavigation.onCompleted.addListener(async (details) => {
     if (response.ok) {
       const result = await response.json();
 
-      if (result && result.productive === false && result.url) {
-        chrome.tabs.update(details.tabId, { url: result.url });
+      if (result && (result.productive === 0 || result.productive === False) && result.url) {
+        chrome.tabs.update(details.tabId, { url: REDIRECT_URL });
       }
     }
-    chrome.tabs.update(details.tabId, { url: REDIRECT_URL });
   } catch (error) {
     console.error("Error checking productivity:", error);
   }

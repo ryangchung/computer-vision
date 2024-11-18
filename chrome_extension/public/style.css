@@ -1,57 +1,54 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f7fa;
+    background-color: #d7e9c4;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+p {
+    font-size: 20px;
     margin: 0;
 }
 
 .container {
-    background-color: #ffffff;
-    padding: 30px;
+    display: flex; /* Use Flexbox for side-by-side layout */
+    align-items: center; /* Center items vertically */
+    background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 850px;
+    height: 400px;
     text-align: center;
-    max-width: 400px;
+    gap: 20px; /* Add spacing between GIF and text */
 }
 
-h1 {
-    color: #d9534f;
-    font-size: 24px;
-    margin-bottom: 10px;
+.container-text {
+    flex: 1; /* Allow text to take remaining space */
+    padding-left: 20px;
 }
 
-p {
-    color: #333;
-    margin-bottom: 20px;
+.title {
+    font-size: 50px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
 }
 
-.time-remaining {
-    background-color: #e7f3fe;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
+.vanish img {
+    display: block;
+    padding-left: 20px;
+}
+
+.footer {
     font-size: 18px;
-    color: #31708f;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.unblock-btn {
-    background-color: #81cbe1;
-    color: #fff;
-}
-
-.unblock-btn:hover {
-    background-color: #31b0d5;
+    margin-top: 20px;
+    color: #0d0c0c;
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
 }

@@ -13,7 +13,7 @@ def predict_productivity(image_path: str) -> bool:
     img_array = np.expand_dims(img_array, axis=0)
 
     prediction = model.predict(img_array)
-    return bool(prediction[0][0] > 0.5)
+    return bool(prediction[0][0] < 0.5)
 
 
 def take_screenshot(url: str):

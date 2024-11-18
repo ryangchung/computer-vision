@@ -8,14 +8,27 @@ from fastapi.middleware.cors import CORSMiddleware
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from database.db import add_website as db_add_website, get_productive_value
 
+# Import model.py
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tensor_model/src"
+    )
+)
+from tensor_model.src.model import predict_productivity, take_screenshot
+
 
 class Website(BaseModel):
     url: str
 
 
 def decide_productivity(url: str) -> bool:
-    # TODO: Call ML model to predict productivity
-    return True
+    screenshot_path = (
+        "../tensor_model/dataset/real_time/"
+        + url.replace("/", "$").replace(":", "#")
+        + ".png"
+    )
+    take_screenshot(url)
+    return predict_productivity(screenshot_path)
 
 
 def create_app():
@@ -31,7 +44,7 @@ def create_app():
 
     @app.get("/")
     def read_root():
-        return {"message": "Hello, World!"}
+        return {"message": "You are not supposed to be here"}
 
     @app.post("/check-productivity")
     def check_productivity(website: Website):

@@ -5,6 +5,7 @@ CUHacking Computer Vision Project
 ```
 pip install "fastapi[standard]"
 pip install tensorflow
+pip install Pillow
 ```
 
 ### Folder Structure

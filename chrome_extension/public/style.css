@@ -32,6 +32,10 @@ p {
     padding-left: 20px;
 }
 
+.description {
+    margin: 0 0 20px 0;
+}
+
 .title {
     font-size: 50px;
     font-weight: bold;

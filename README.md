@@ -2,10 +2,29 @@
 CUHacking Computer Vision Project
 
 ### Installation
+#### API
 ```
 pip install "fastapi[standard]"
 pip install tensorflow
 pip install Pillow
+pip install selenium
+```
+#### Chrome Extension
+```
+npm install
+```
+
+### How-To Run
+#### API
+```
+cd api
+fastapi dev api.py
+```
+####
+```
+cd chrome_extension
+npm run build
+Navigate to chrome://extensions/ > load unpacked > import chrome_extension/build/
 ```
 
 ### Folder Structure

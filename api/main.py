@@ -39,7 +39,8 @@ def create_app():
         productive = get_productive_value(website.url)
         if productive is None:
             path = take_screenshot(website.url)
-            db_add_website(website.url, predict_productivity(path))
+            productive = predict_productivity(path)
+            db_add_website(website.url, productive)
         print({"url": website.url, "productive": productive})
 
         return {"url": website.url, "productive": productive}

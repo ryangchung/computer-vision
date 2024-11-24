@@ -11,96 +11,43 @@ importing necessary libraries
 We trained a model from scracth, used a pretrained model for better results as well
 Used CNN (MobileNetV2 is built on CNN's) + our own layers
 Data Collected ourself with Selenium Script in captureData.py
-
-COMP VISION TYPE SHII
 """
 
-# !pip install tensorflow
-
-from google.colab import drive
-
-# Mount Google Drive at the default mount point
-drive.mount('/content/drive')
-
-#Start by Loading Data
+from google.colab import drive, files
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-import matplotlib.pyplot as plt
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.utils import load_img, img_to_array
+import numpy as np
 import os
 
-# Define data augmentation and preprocessing to normalize pixel values
+drive.mount('/content/drive')
+
 train_datagen = ImageDataGenerator(rescale=1./255)
 test_datagen = ImageDataGenerator(rescale=1./255)
 
-# subdirs = [os.path.join(train_dir, sub) for sub in os.listdir(train_dir) if os.path.isdir(os.path.join(train_dir, sub))]
-
-# #FOR DEBUGGING to make sure same amount of photos
-# for subdir in subdirs:
-#     images = [f for f in os.listdir(subdir) if os.path.isfile(os.path.join(subdir, f))]
-#     print(f"Folder '{os.path.basename(subdir)}' has {len(images)} images.")
-
-
 test_dir = '/content/drive/My Drive/data/test'
-subdirs1 = os.listdir(test_dir)
-
-print(subdirs1)
-
-
 train_dir = '/content/drive/My Drive/data/train'
-subdirs2 = os.listdir(train_dir)
-print(subdirs2)
 
-
-
-# Load train data
 train_data = train_datagen.flow_from_directory(
-    train_dir ,  # Path
-    target_size=(128, 128),  # Resize
-    batch_size=32,          # Batch size
+    train_dir ,
+    target_size=(128, 128), 
+    batch_size=32,        
     class_mode='binary'     # Binary because we have (productive/unproductive)
 )
 
-# Load test data
 test_data = test_datagen.flow_from_directory(
-
-    #same details as above just with test data instead of train
     test_dir,
     target_size=(128, 128),
     batch_size=32,
     class_mode='binary'
 )
 
-
-#was showing productive and unproductive reversed, confirming indicies to avoid inconsistent guessing :)
-print("Train class indices:", train_data.class_indices)
-print("Test class indices:", test_data.class_indices)
-
-import matplotlib.pyplot as plt
-
-# Get a batch of images and labels from the training generator
-images, labels = next(train_data)  # Get the first batch
-
-# Display the first 9 images and their labels
-plt.figure(figsize=(10, 10))  # Set the figure size
-
-for i in range(9):  # Display 9 images
-    plt.subplot(3, 3, i + 1)  # Create a 3x3 grid
-    plt.imshow(images[i])  # Show the image
-    plt.title(f"Label: {int(labels[i])}")  # Display the label (0 or 1)
-    plt.axis('off')  # Remove axes for better visualization
-
-plt.tight_layout()  # Adjust layout to avoid overlap
-plt.show()
-
-"""**USING PRETRAINED MobileNetV2**"""
-
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-
 base_model = tf.keras.applications.MobileNetV2(
-    input_shape=(128, 128, 3),  # Image size and channels
+    input_shape=(128, 128, 3),
     include_top=False,         # Exclude final classification layers, we want our own
     weights='imagenet'         # Use pretrained weights from ImageNet
 )
@@ -109,43 +56,33 @@ base_model = tf.keras.applications.MobileNetV2(
 base_model.trainable = False
 
 model = tf.keras.Sequential([
-    base_model,  # Pretrained base from above
+    base_model,
     tf.keras.layers.GlobalAveragePooling2D(),
-    tf.keras.layers.Dense(128, activation='relu'),  # Dense layer for learning
-    tf.keras.layers.Dropout(0.3),  # Prevent overfitting
-    tf.keras.layers.Dense(1, activation='sigmoid')  # Output layer for binary classification
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.3),
+    tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 
-
-
-# Compile the model
 model.compile(optimizer='adam',
-              loss='binary_crossentropy',  # Use binary cross-entropy for binary classification
+              loss='binary_crossentropy',
               metrics=['accuracy'])
 
-model.summary()  # Display the model structure
+model.summary()
 
-# Train the model
 history = model.fit(
     train_data,
-    validation_data=test_data,  # Use test data for validation
-    epochs=10                      # Number of training epochs
+    validation_data=test_data,
+    epochs=10
 )
 
-import numpy as np
-from tensorflow.keras.utils import load_img, img_to_array
-from google.colab import files
-
-# Upload image
-uploaded = files.upload()
-image_path = next(iter(uploaded))  # Get the path of the uploaded image
+uploaded_image = files.upload()
+image_path = next(iter(uploaded_image))  # Get the path of the uploaded image
 
 # Load and preprocess the image
-img = load_img(image_path, target_size=(128, 128))  # Corrected variable name
-img_array = img_to_array(img) / 255.0  # Normalize to [0, 1]
-img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+img = load_img(image_path, target_size=(128, 128))
+img_array = img_to_array(img) / 255.0
+img_array = np.expand_dims(img_array, axis=0)
 
-# Predict
 prediction = model.predict(img_array)
 print("Prediction:", "Productive" if prediction[0][0] < 0.5 else "Unproductive")
 

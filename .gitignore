@@ -164,5 +164,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# Ignore PNG files in tensor_model/dataset/real_time
-tensor_model/dataset/real_time/*.png
+# Ignore PNG files in tensor/dataset/prod
+tensor/dataset/prod/*.png

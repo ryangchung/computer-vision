@@ -2,7 +2,7 @@ import sqlite3
 
 
 def initialize_database():
-    with sqlite3.connect("../database/database.sqlite") as conn:
+    with sqlite3.connect("db/database.sqlite") as conn:
         cursor = conn.cursor()
         cursor.execute(
             """
@@ -13,12 +13,11 @@ def initialize_database():
         )
         """
         )
-        # Commit the changes
         conn.commit()
 
 
 def get_productive_value(url):
-    with sqlite3.connect("../database/database.sqlite") as conn:
+    with sqlite3.connect("db/database.sqlite") as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT productive FROM websites WHERE url = ?", (url,))
         result = cursor.fetchone()
@@ -29,7 +28,7 @@ def get_productive_value(url):
 
 
 def add_website(url, productive):
-    with sqlite3.connect("../database/database.sqlite") as conn:
+    with sqlite3.connect("db/database.sqlite") as conn:
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO websites (url, productive) VALUES (?, ?)", (url, productive)
